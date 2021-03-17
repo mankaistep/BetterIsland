@@ -1,0 +1,21 @@
+package me.manaki.plugin.betterisland;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+public final class BetterIsland extends JavaPlugin {
+
+    @Override
+    public void onEnable() {
+        // Plugin startup logic
+
+    }
+
+    @Override
+    public void onDisable() {
+        // Plugin shutdown logic
+    }
+
+    public static BetterIsland get() {
+        return JavaPlugin.getPlugin(BetterIsland.class);
+    }
+}
