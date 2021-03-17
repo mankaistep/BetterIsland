@@ -2,29 +2,87 @@ package me.manaki.plugin.betterisland.listener;
 
 import me.manaki.plugin.betterisland.BetterIsland;
 import me.manaki.plugin.betterisland.border.Borders;
+import me.manaki.plugin.betterisland.data.BIData;
+import me.manaki.plugin.betterisland.data.BIDatas;
+import me.manaki.plugin.betterisland.gui.UpgradeGUI;
 import me.manaki.plugin.betterisland.upgrade.Upgrade;
+import me.manaki.plugin.betterisland.upgrade.UpgradeType;
+import me.manaki.plugin.betterisland.upgrade.Upgrades;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.postgresql.core.Utils;
+import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.database.objects.Island;
 
-public class BIListener {
+public class BIListener implements Listener {
 
+    @EventHandler
+    public void onClick(InventoryClickEvent e) {
+        UpgradeGUI.onClick(e);
+    }
+
+    @EventHandler
+    public void onDrag(InventoryDragEvent e) {
+        UpgradeGUI.onDrag(e);
+    }
+
+    @EventHandler
+    public void onClose(InventoryCloseEvent e) {
+        UpgradeGUI.onClose(e);
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         Bukkit.getScheduler().runTaskLater(BetterIsland.get(), () -> {
-            Borders.check(BetterIsland.get(), player, true);
+            Borders.check(BetterIsland.get(), player);
         }, 10);
     }
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent e) {
         Player player = e.getPlayer();
-        Borders.check(BetterIsland.get(), player, true);
+        Bukkit.getScheduler().runTaskLater(BetterIsland.get(), () -> {
+            Borders.check(BetterIsland.get(), player);
+        }, 10);
+    }
+
+    @EventHandler
+    public void onAnimalSpawn(EntitySpawnEvent e) {
+        var entity = e.getEntity();
+        if (!Upgrades.getAllowedEntities().contains(entity.getType().name())) return;
+
+        // Check
+        var l = entity.getLocation();
+        var im = BentoBox.getInstance().getIslandsManager();
+        var is = im.getIslandAt(l).isPresent() ? im.getIslandAt(l).get() : null;
+        if (is == null) return;
+
+        // Get max
+        var op = Bukkit.getOfflinePlayer(is.getOwner());
+        var name = op.getName();
+        BIData data = BIDatas.get(name);
+        int max = Upgrades.get(data.getUprade(UpgradeType.ANIMAL)).getAmount();
+
+        // Count
+        int c = 0;
+        for (Entity nearE : is.getCenter().getNearbyEntities(200, 200, 200)) {
+            if (Upgrades.getAllowedEntities().contains(nearE.getType().name())) c++;
+            if (c >= max) {
+                e.setCancelled(true);
+                return;
+            }
+        }
     }
 
 

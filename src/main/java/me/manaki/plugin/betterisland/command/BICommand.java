@@ -1,0 +1,32 @@
+package me.manaki.plugin.betterisland.command;
+
+import me.manaki.plugin.betterisland.BetterIsland;
+import me.manaki.plugin.betterisland.gui.UpgradeGUI;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+public class BICommand implements CommandExecutor {
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+
+        if (args.length == 0) {
+            Player player = (Player) sender;
+            UpgradeGUI.open(player);
+            return false;
+        }
+
+        if (!sender.hasPermission("betterisland.admin")) return false;
+
+        if (args[0].equalsIgnoreCase("reload")) {
+            BetterIsland.get().reloadConfig();
+            sender.sendMessage("§aAll fucking done!");
+        }
+
+        return false;
+    }
+
+}
