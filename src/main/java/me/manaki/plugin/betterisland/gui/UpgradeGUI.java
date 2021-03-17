@@ -39,7 +39,8 @@ public class UpgradeGUI {
     }
 
     public static void onClick(InventoryClickEvent e) {
-        if (e.getInventory().getHolder() instanceof UGUIHolder) e.setCancelled(true);
+        if (!(e.getInventory().getHolder() instanceof UGUIHolder)) return;
+        e.setCancelled(true);
         if (e.getClickedInventory() != e.getWhoClicked().getOpenInventory().getTopInventory()) return;
 
         int slot = e.getSlot();
