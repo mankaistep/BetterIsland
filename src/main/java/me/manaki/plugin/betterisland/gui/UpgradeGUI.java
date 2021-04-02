@@ -103,9 +103,10 @@ public class UpgradeGUI {
             lore.add("§f" + type.getName() + ": §7" + from);
         }
         else {
-            var to = Upgrades.get(Upgrades.get(upgrade).getNext()).getAmount();
+            var nextu = Upgrades.get(u.getNext());
+            var to = nextu.getAmount();
             lore.add("§f" + type.getName() + ": §7" + from + " >> " + to);
-            lore.add("§fGiá: §c" + u.getPrice() + "$ §f§o(Click để nâng cấp)");
+            lore.add("§fGiá: §c" + nextu.getPrice() + "$ §f§o(Click để nâng cấp)");
         }
         meta.setLore(lore);
         is.setItemMeta(meta);
