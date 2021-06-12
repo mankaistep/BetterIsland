@@ -71,6 +71,7 @@ public class BIData {
         Player player = Bukkit.getPlayer(this.playerName);
         var im = BentoBox.getInstance().getIslandsManager();
         var is = im.getIsland(player.getWorld(), player.getUniqueId());
+        if (is == null) return;
 
         // Set MEMBER
         im.setMaxMembers(is, 500, Upgrades.get(u).getAmount() - 1);
