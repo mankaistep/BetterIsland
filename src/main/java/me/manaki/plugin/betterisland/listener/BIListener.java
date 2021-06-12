@@ -22,7 +22,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.postgresql.core.Utils;
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.events.island.IslandCreatedEvent;
 import world.bentobox.bentobox.database.objects.Island;
+
+import java.util.Objects;
 
 public class BIListener implements Listener {
 
@@ -85,5 +88,13 @@ public class BIListener implements Listener {
         }
     }
 
+    @EventHandler
+    public void onIslandCreatedEvent(IslandCreatedEvent e) {
+        var is = e.getIsland();
+        var op = Bukkit.getOfflinePlayer(Objects.requireNonNull(is.getOwner()));
+        var name = op.getName();
+        BIData data = BIDatas.get(name);
+        data.save();
+    }
 
 }
