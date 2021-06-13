@@ -23,9 +23,15 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.postgresql.core.Utils;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.events.island.IslandCreatedEvent;
+import world.bentobox.bentobox.api.events.island.IslandEnterEvent;
+import world.bentobox.bentobox.api.events.island.IslandResettedEvent;
+import world.bentobox.bentobox.api.events.team.TeamInviteEvent;
+import world.bentobox.bentobox.api.events.team.TeamKickEvent;
+import world.bentobox.bentobox.api.events.team.TeamLeaveEvent;
 import world.bentobox.bentobox.database.objects.Island;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class BIListener implements Listener {
 
@@ -93,8 +99,45 @@ public class BIListener implements Listener {
         var is = e.getIsland();
         var op = Bukkit.getOfflinePlayer(Objects.requireNonNull(is.getOwner()));
         var name = op.getName();
+
+        Bukkit.getScheduler().runTaskLater(BetterIsland.get(), () -> {
+            BIData data = BIDatas.get(name);
+            data.save();
+            BetterIsland.get().getLogger().info("Saved island data " + is.getOwner());
+        }, 20);
+    }
+
+    @EventHandler
+    public void onIslandCreatedEvent(IslandEnterEvent e) {
+        var is = e.getIsland();
+        var op = Bukkit.getOfflinePlayer(Objects.requireNonNull(is.getOwner()));
+        var name = op.getName();
+
+        Bukkit.getScheduler().runTaskLater(BetterIsland.get(), () -> {
+            BIData data = BIDatas.get(name);
+            data.save();
+            BetterIsland.get().getLogger().info("Saved island data " + is.getOwner());
+        }, 20);
+    }
+
+    @EventHandler
+    public void onIslandResetteddEvent(TeamInviteEvent e) {
+        var is = e.getIsland();
+        var op = Bukkit.getOfflinePlayer(Objects.requireNonNull(is.getOwner()));
+        var name = op.getName();
         BIData data = BIDatas.get(name);
-        data.save();
+
+        int currentSize = is.getMemberSet().size();
+        if (currentSize >= Upgrades.get(data.getUprade(UpgradeType.MEMBER)).getAmount()) {
+            e.setCancelled(true);
+            for (UUID uuid : is.getMemberSet()) {
+                var mem = Bukkit.getOfflinePlayer(uuid);
+                if (mem.isOnline()) {
+                    mem.getPlayer().sendMessage("§cNâng cấp đảo để có thể mời thêm người mới");
+                }
+            }
+        }
+
     }
 
 }

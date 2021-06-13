@@ -74,7 +74,7 @@ public class BIData {
         if (is == null) return;
 
         // Set MEMBER
-        im.setMaxMembers(is, 500, Upgrades.get(u).getAmount() - 1);
+        im.setMaxMembers(is, 500, Upgrades.get(u).getAmount());
 
         // OTHER RANKS
         im.setMaxMembers(is, 0, 10);
