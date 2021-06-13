@@ -108,7 +108,7 @@ public class BIListener implements Listener {
     }
 
     @EventHandler
-    public void onIslandCreatedEvent(IslandEnterEvent e) {
+    public void onIslandEnterEvent(IslandEnterEvent e) {
         var is = e.getIsland();
         var op = Bukkit.getOfflinePlayer(Objects.requireNonNull(is.getOwner()));
         var name = op.getName();

@@ -1,3 +1,4 @@
+world: bskyblock_world
 allowed-entities:
   - PIG
   - COW

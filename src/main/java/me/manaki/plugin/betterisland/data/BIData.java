@@ -68,9 +68,11 @@ public class BIData {
 
     public void applyToIsland() {
         String u = getUprade(UpgradeType.MEMBER);
-        Player player = Bukkit.getPlayer(this.playerName);
+        var player = Bukkit.getOfflinePlayerIfCached(this.playerName);
+        if (player == null) return;
+
         var im = BentoBox.getInstance().getIslandsManager();
-        var is = im.getIsland(player.getWorld(), player.getUniqueId());
+        var is = im.getIsland(Upgrades.getWorld(), player.getUniqueId());
         if (is == null) return;
 
         // Set MEMBER
