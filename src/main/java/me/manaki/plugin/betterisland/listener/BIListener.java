@@ -14,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -91,6 +92,28 @@ public class BIListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        var p = e.getPlayer();
+        var im = BentoBox.getInstance().getIslandsManager();
+
+        var iso = im.getIslandAt(e.getBlock().getLocation());
+        if (!iso.isPresent()) return;
+
+        var is = iso.get();
+        if (!is.getMemberSet().contains(p.getUniqueId())) return;
+
+        int dx = Math.abs(e.getBlock().getX() - is.getCenter().getBlockX());
+        int dz = Math.abs(e.getBlock().getZ() - is.getCenter().getBlockZ());
+
+        int r = Upgrades.get(BIDatas.get(p).getUprade(UpgradeType.BORDER)).getAmount();
+
+        if (dx > (r / 2) || dz > (r / 2)) {
+            e.setCancelled(true);
+            p.sendMessage("§cNâng cấp đảo để đặt xa hơn");
         }
     }
 

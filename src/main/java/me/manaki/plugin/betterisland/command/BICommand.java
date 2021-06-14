@@ -1,7 +1,9 @@
 package me.manaki.plugin.betterisland.command;
 
 import me.manaki.plugin.betterisland.BetterIsland;
+import me.manaki.plugin.betterisland.border.Borders;
 import me.manaki.plugin.betterisland.gui.UpgradeGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,6 +26,11 @@ public class BICommand implements CommandExecutor {
         if (args[0].equalsIgnoreCase("reload")) {
             BetterIsland.get().reloadConfig();
             sender.sendMessage("§aAll fucking done!");
+        }
+
+        else if (args[0].equalsIgnoreCase("bordertoggle")) {
+            Player player = Bukkit.getPlayer(args[1]);
+            Borders.toggle(player);
         }
 
         return false;
