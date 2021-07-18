@@ -19,8 +19,7 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.postgresql.core.Utils;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.events.island.IslandCreatedEvent;
@@ -160,7 +159,14 @@ public class BIListener implements Listener {
                 }
             }
         }
+    }
 
+    @EventHandler
+    public void onBucketBug(PlayerBucketFillEvent e) {
+        if (e.getBlock().getType().name().contains("BUBBLE")) {
+            e.getPlayer().sendMessage("§cNếu bạn muốn múc nước/lava hãy ra chỗ nào không có không khí nước");
+            e.setCancelled(true);
+        }
     }
 
 }
