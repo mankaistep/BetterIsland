@@ -103,7 +103,6 @@ public class BIListener implements Listener {
         if (!iso.isPresent()) return;
 
         var is = iso.get();
-        if (!is.getMemberSet().contains(p.getUniqueId())) return;
 
         int dx = Math.abs(e.getBlock().getX() - is.getCenter().getBlockX());
         int dz = Math.abs(e.getBlock().getZ() - is.getCenter().getBlockZ());
