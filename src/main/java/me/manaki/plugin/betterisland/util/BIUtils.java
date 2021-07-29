@@ -2,17 +2,9 @@ package me.manaki.plugin.betterisland.util;
 
 import me.manaki.plugin.betterisland.BetterIsland;
 import me.manaki.plugin.betterisland.config.IslandConfig;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import world.bentobox.bank.Bank;
 import world.bentobox.bentobox.BentoBox;
-import world.bentobox.bentobox.api.addons.request.AddonRequestBuilder;
-import world.bentobox.bentobox.api.addons.request.AddonRequestHandler;
 import world.bentobox.bentobox.api.metadata.MetaDataValue;
 import world.bentobox.bentobox.database.objects.Island;
-import world.bentobox.bentobox.managers.AddonsManager;
-
-import java.util.Map;
 
 public class BIUtils {
 
@@ -23,8 +15,7 @@ public class BIUtils {
             var data = island.getMetaData().get();
             if (data.containsKey(KEY)) return data.get(KEY).asInt();
             else {
-                data.put(KEY, new MetaDataValue(0));
-                island.setMetaData(data);
+                setLevel(island, 0);
                 return 0;
             }
         }
@@ -48,6 +39,7 @@ public class BIUtils {
 
         // Set max home
         is.setMaxHomes(ic.getMaxHome());
+        BentoBox.getInstance().getIslandsManager().save(is);
     }
 
     public static double getBankBalance(Island is) {
