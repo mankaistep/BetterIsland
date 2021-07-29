@@ -1,9 +1,7 @@
 package me.manaki.plugin.betterisland.border;
 
 import com.google.common.collect.Sets;
-import me.manaki.plugin.betterisland.data.BIDatas;
-import me.manaki.plugin.betterisland.upgrade.UpgradeType;
-import me.manaki.plugin.betterisland.upgrade.Upgrades;
+import me.manaki.plugin.betterisland.util.BIUtils;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.PacketPlayOutWorldBorder;
 import net.minecraft.server.v1_16_R3.WorldBorder;
@@ -23,7 +21,8 @@ public class Borders {
     public static void toggle(Player player) {
         if (borderOn.contains(player.getName())) {
             borderOn.remove(player.getName());
-            player.sendMessage("§aĐã tắt hoạt ảnh giới hạn, thoát ra vào lại island để cập nhật thay đổi");
+            player.sendMessage("§6Đã tắt hoạt ảnh giới hạn");
+            removeBorder(player);
         }
         else {
             borderOn.add(player.getName());
@@ -49,12 +48,39 @@ public class Borders {
         int x = is.getCenter().getBlockX();
         int z = is.getCenter().getBlockZ();
 
-        int radius = Upgrades.get(BIDatas.get(p).getUprade(UpgradeType.BORDER)).getAmount();
+        int radius = BIUtils.getLevelConfig(is).getBorderSize();
 
         WorldBorder wb = new WorldBorder();
         wb.world = ((CraftWorld) p.getWorld()).getHandle();
         wb.setCenter(x, z);
         wb.setSize(radius);
+        wb.setWarningDistance(0);
+        EntityPlayer player = ((CraftPlayer) p).getHandle();
+        wb.world = (WorldServer) player.world;
+        player.playerConnection.sendPacket(new PacketPlayOutWorldBorder(wb, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_SIZE));
+        player.playerConnection.sendPacket(new PacketPlayOutWorldBorder(wb, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_CENTER));
+        player.playerConnection.sendPacket(new PacketPlayOutWorldBorder(wb, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_WARNING_BLOCKS));
+        player.playerConnection.sendPacket(new PacketPlayOutWorldBorder(wb, PacketPlayOutWorldBorder.EnumWorldBorderAction.LERP_SIZE));
+
+    }
+
+    public static void removeBorder(Player p) {
+        if (!borderOn.contains(p.getName())) return;
+
+        var im = BentoBox.getInstance().getIslandsManager();
+        var pm = BentoBox.getInstance().getPlayersManager();
+
+        var is = im.getIsland(p.getWorld(), pm.getUser(p.getUniqueId()));
+        if (is == null) return;
+        if (is.getWorld() != p.getWorld()) return;
+
+        int x = is.getCenter().getBlockX();
+        int z = is.getCenter().getBlockZ();
+
+        WorldBorder wb = new WorldBorder();
+        wb.world = ((CraftWorld) p.getWorld()).getHandle();
+        wb.setCenter(x, z);
+        wb.setSize(10000);
         wb.setWarningDistance(0);
         EntityPlayer player = ((CraftPlayer) p).getHandle();
         wb.world = (WorldServer) player.world;

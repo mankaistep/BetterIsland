@@ -2,7 +2,7 @@ package me.manaki.plugin.betterisland.command;
 
 import me.manaki.plugin.betterisland.BetterIsland;
 import me.manaki.plugin.betterisland.border.Borders;
-import me.manaki.plugin.betterisland.gui.UpgradeGUI;
+import me.manaki.plugin.betterisland.gui.IslandGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,7 @@ public class BICommand implements CommandExecutor {
 
         if (args.length == 0) {
             Player player = (Player) sender;
-            UpgradeGUI.open(player);
+            IslandGUI.open(player);
             return false;
         }
 

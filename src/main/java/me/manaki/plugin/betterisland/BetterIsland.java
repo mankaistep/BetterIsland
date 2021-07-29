@@ -1,16 +1,15 @@
 package me.manaki.plugin.betterisland;
 
 import me.manaki.plugin.betterisland.command.BICommand;
-import me.manaki.plugin.betterisland.data.BIDatas;
+import me.manaki.plugin.betterisland.config.PluginConfig;
 import me.manaki.plugin.betterisland.listener.BIListener;
-import me.manaki.plugin.betterisland.upgrade.Upgrades;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
+import world.bentobox.bentobox.BentoBox;
 
 public final class BetterIsland extends JavaPlugin {
+
+    private PluginConfig config;
 
     @Override
     public void onEnable() {
@@ -22,20 +21,17 @@ public final class BetterIsland extends JavaPlugin {
 
         // Command
         this.getCommand("islandupgrade").setExecutor(new BICommand());
-    }
-
-    @Override
-    public void onDisable() {
-        BIDatas.saveAll();
-    }
+ }
 
     @Override
     public void reloadConfig() {
         this.saveDefaultConfig();
-        var config = YamlConfiguration.loadConfiguration(new File(this.getDataFolder(), "config.yml"));
-        Upgrades.reload(config);
+        this.config = new PluginConfig(this);
     }
 
+    public PluginConfig getPluginConfig() {
+        return config;
+    }
 
     public static BetterIsland get() {
         return JavaPlugin.getPlugin(BetterIsland.class);
