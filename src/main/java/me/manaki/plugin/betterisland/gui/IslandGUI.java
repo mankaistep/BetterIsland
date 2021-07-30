@@ -25,10 +25,11 @@ public class IslandGUI {
 
     private static final int CREATE_BUTTON = 4;
 
-    private static final int GO_BUTTON = 1;
-    private static final int HELP_BUTTON = 3;
-    private static final int UPGRADE_BUTTON = 5;
-    private static final int DELETE_BUTTON = 7;
+    private static final int GO_BUTTON = 0;
+    private static final int HELP_BUTTON = 2;
+    private static final int UPGRADE_BUTTON = 4;
+    private static final int DELETE_BUTTON = 8;
+    private static final int MARKET_BUTTON = 6;
 
     public static void open(Player p) {
         var w = BetterIsland.get().getPluginConfig().getBukkitWorld();
@@ -60,6 +61,7 @@ public class IslandGUI {
                 inv.setItem(HELP_BUTTON, getHelpButton());
                 inv.setItem(UPGRADE_BUTTON, getUpgradeButton(p));
                 inv.setItem(DELETE_BUTTON, getDelButton());
+                inv.setItem(MARKET_BUTTON, getMarketButton());
             });
         }
     }
@@ -105,6 +107,9 @@ public class IslandGUI {
             if (!MoneyAPI.getEco().has(p, DEL_REQUIRE)) {
                 p.sendMessage("§cKhông đủ, yêu cầu §f§l" + DEL_REQUIRE + "$ §cđể xóa đảo!");
             } else  Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dm open xoadaoonconfirm " + p.getName());
+        }
+        else if (slot == MARKET_BUTTON) {
+            Bukkit.dispatchCommand(p, "market");
         }
 
     }
@@ -211,6 +216,16 @@ public class IslandGUI {
         im.setDisplayName("§e§lCLICK §c§lXóa đảo");
         is.setItemMeta(im);
         is.setLore(Lists.newArrayList("§fTiêu tốn §f§l" + DEL_REQUIRE + "$"));
+
+        return is;
+    }
+
+    private static ItemStack getMarketButton() {
+        var is = new ItemStack(Material.EMERALD);
+        var im = is.getItemMeta();
+        im.setDisplayName("§e§lCLICK §a§lThương lái");
+        is.setItemMeta(im);
+        is.setLore(Lists.newArrayList("§f§oLà nơi bán những mặt hàng bạn có để kiếm §f§l$", "§7§o/market"));
 
         return is;
     }
