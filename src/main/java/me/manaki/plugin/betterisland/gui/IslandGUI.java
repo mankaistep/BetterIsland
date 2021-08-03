@@ -191,7 +191,7 @@ public class IslandGUI {
 
         im.setDisplayName("§a§lĐảo cấp Lv." + ic.getLevel());
         List<String> lore = Lists.newArrayList();
-        lore.add("§6Diện tích: §f" + ic.getBorderSize());
+        lore.add("§6Diện tích: §f" + ic.getBorderSize() + "x" + ic.getBorderSize());
         lore.add("§6Sethome tối đa: §f" + ic.getMaxHome());
         lore.add("");
         if (BetterIsland.get().getPluginConfig().isMaxLevel(ic.getLevel())) lore.add("§bCấp đảo tối đa!");
@@ -199,7 +199,7 @@ public class IslandGUI {
             var nextic = BetterIsland.get().getPluginConfig().getNextLevel(ic.getLevel());
             lore.add("§3§lNâng cấp lên Lv." + nextic.getLevel());
             lore.add("§bChi phí: §f§l" + nextic.getMoneyRequired() + "$ §f(trong /is bank)");
-            lore.add("§bDiện tích mới: §f" + nextic.getBorderSize());
+            lore.add("§bDiện tích mới: §f" + nextic.getBorderSize() + "x" + nextic.getBorderSize());
             lore.add("§bSethome tối đa mới: §f" + nextic.getMaxHome());
             if (!p.hasPermission("BSkyBlock.bank.user.deposit")) {
                 lore.add("");
