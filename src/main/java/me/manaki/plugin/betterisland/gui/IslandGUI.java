@@ -201,6 +201,12 @@ public class IslandGUI {
             lore.add("§bChi phí: §f§l" + nextic.getMoneyRequired() + "$ §f(trong /is bank)");
             lore.add("§bDiện tích mới: §f" + nextic.getBorderSize());
             lore.add("§bSethome tối đa mới: §f" + nextic.getMaxHome());
+            if (!p.hasPermission("BSkyBlock.bank.user.deposit")) {
+                lore.add("");
+                lore.add("§cLàm nhiệm vụ §fMở giao dịch §cở §f/nhiemvu");
+                lore.add("§cđể mở khóa tính năng §f/is deposit và");
+                lore.add("§f/is withdraw §c(rút và gửi tiền bank)");
+            }
             lore.add("");
             lore.add("§e§lCLICK để nâng cấp");
         }
