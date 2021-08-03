@@ -38,8 +38,20 @@ public class BIUtils {
         if (ic == null) return;
 
         // Set max home
-        is.setMaxHomes(ic.getMaxHome());
-        BentoBox.getInstance().getIslandsManager().save(is);
+        var im = BentoBox.getInstance().getIslandsManager();
+        im.setMaxHomes(is, ic.getMaxHome());
+
+        // Set MEMBER
+        im.setMaxMembers(is, 500, 5);
+
+        // OTHER RANKS
+        im.setMaxMembers(is, 0, 5);
+        im.setMaxMembers(is, 200, 5);
+        im.setMaxMembers(is, 400, 5);
+        im.setMaxMembers(is, 900, 5);
+        im.setMaxMembers(is, 1000, 1);
+
+        im.save(is);
     }
 
     public static double getBankBalance(Island is) {
