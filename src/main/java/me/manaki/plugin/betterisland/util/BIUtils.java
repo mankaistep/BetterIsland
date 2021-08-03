@@ -27,6 +27,15 @@ public class BIUtils {
         return BetterIsland.get().getPluginConfig().getIsLevels().getOrDefault(lv, null);
     }
 
+    /*
+     #   VISITOR   = 0
+     #   COOP      = 200
+     #   TRUSTED   = 400
+     #   MEMBER    = 500
+     #   SUB-OWNER = 900
+     #   OWNER     = 1000
+     */
+
     public static void setLevel(Island is, int lv) {
         if (!is.getMetaData().isPresent()) return;
 
@@ -37,18 +46,22 @@ public class BIUtils {
         var ic = BetterIsland.get().getPluginConfig().getIsLevels().getOrDefault(lv, null);
         if (ic == null) return;
 
+        setIsland(is, ic.getMaxHome());
+    }
+
+    public static void setIsland(Island is, int maxHomes) {
         // Set max home
         var im = BentoBox.getInstance().getIslandsManager();
-        im.setMaxHomes(is, ic.getMaxHome());
+        im.setMaxHomes(is, maxHomes);
 
         // Set MEMBER
-        im.setMaxMembers(is, 500, 5);
+        im.setMaxMembers(is, 500, 15);
 
         // OTHER RANKS
-        im.setMaxMembers(is, 0, 5);
-        im.setMaxMembers(is, 200, 5);
-        im.setMaxMembers(is, 400, 5);
-        im.setMaxMembers(is, 900, 5);
+        im.setMaxMembers(is, 0, 15);
+        im.setMaxMembers(is, 200, 15);
+        im.setMaxMembers(is, 400, 15);
+        im.setMaxMembers(is, 900, 15);
         im.setMaxMembers(is, 1000, 1);
 
         im.save(is);

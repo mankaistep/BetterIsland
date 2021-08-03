@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import world.bentobox.bentobox.BentoBox;
+import world.bentobox.bentobox.api.events.island.IslandEnterEvent;
 
 public class BIListener implements Listener {
 
@@ -75,6 +76,14 @@ public class BIListener implements Listener {
             e.getPlayer().sendMessage("§cNếu bạn muốn múc nước/lava hãy ra chỗ nào không có không khí nước");
             e.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onJoinIsland(IslandEnterEvent e) {
+        var is = e.getIsland();
+        int lv = BIUtils.getLevel(is);
+        BIUtils.setLevel(is, lv);
+        BetterIsland.get().getLogger().info("Island updated (" + is.getUniqueId() + ")");
     }
 
 }
