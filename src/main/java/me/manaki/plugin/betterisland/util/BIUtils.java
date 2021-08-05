@@ -64,6 +64,9 @@ public class BIUtils {
         im.setMaxMembers(is, 900, 15);
         im.setMaxMembers(is, 1000, 1);
 
+        is.setMaxEverProtectionRange(180);
+        is.setProtectionRange(180);
+
         im.save(is);
     }
 
