@@ -25,8 +25,9 @@ public class PluginConfig {
             int money = config.getInt(path + ".money-required");
             int border = config.getInt(path + ".data.border");
             int home = config.getInt(path + ".data.home");
+            int animal = config.getInt(path  + ".data.animal");
 
-            isLevels.put(i, new IslandConfig(i, money, border, home));
+            isLevels.put(i, new IslandConfig(i, money, border, home, animal));
 
             i++;
         }

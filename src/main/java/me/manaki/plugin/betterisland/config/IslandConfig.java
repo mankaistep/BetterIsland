@@ -6,12 +6,14 @@ public class IslandConfig {
     private final int level;
     private final int borderSize;
     private final int maxHome;
+    private final int maxAnimal;
 
-    public IslandConfig(int level, int moneyRequired, int borderSize, int maxHome) {
+    public IslandConfig(int level, int moneyRequired, int borderSize, int maxHome, int maxAnimal) {
         this.moneyRequired = moneyRequired;
         this.level = level;
         this.borderSize = borderSize;
         this.maxHome = maxHome;
+        this.maxAnimal = maxAnimal;
     }
 
     public int getMoneyRequired() {
@@ -28,5 +30,9 @@ public class IslandConfig {
 
     public int getMaxHome() {
         return maxHome;
+    }
+
+    public int getMaxAnimal() {
+        return maxAnimal;
     }
 }

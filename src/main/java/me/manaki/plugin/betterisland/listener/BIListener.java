@@ -5,10 +5,13 @@ import me.manaki.plugin.betterisland.border.Borders;
 import me.manaki.plugin.betterisland.gui.IslandGUI;
 import me.manaki.plugin.betterisland.util.BIUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Animals;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -18,6 +21,35 @@ import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.events.island.IslandEnterEvent;
 
 public class BIListener implements Listener {
+
+    @EventHandler
+    public void onAnimalSpawn(EntitySpawnEvent e) {
+        var entity = e.getEntity();
+        if (!(entity instanceof Animals)) return;
+
+        // Check
+        var l = entity.getLocation();
+        var im = BentoBox.getInstance().getIslandsManager();
+        var is = im.getIslandAt(l).isPresent() ? im.getIslandAt(l).get() : null;
+        if (is == null) return;
+
+        // Get max
+        var isconfig = BIUtils.getLevelConfig(is);
+        int max = isconfig.getMaxAnimal();
+
+        // Count
+        int c = 0;
+        for (Entity nearE : is.getCenter().getNearbyEntities(200, 200, 200)) {
+            if (nearE instanceof Animals) c++;
+            if (c >= max) {
+                for (Player p : is.getPlayersOnIsland()) {
+                    p.sendActionBar("§cVừa có thú nuôi spawn, nhưng vượt quá số lượng tối đa nên bị hủy");
+                }
+                e.setCancelled(true);
+                return;
+            }
+        }
+    }
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
