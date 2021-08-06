@@ -2,6 +2,7 @@ package me.manaki.plugin.betterisland.util;
 
 import me.manaki.plugin.betterisland.BetterIsland;
 import me.manaki.plugin.betterisland.config.IslandConfig;
+import org.bukkit.Bukkit;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.metadata.MetaDataValue;
 import world.bentobox.bentobox.database.objects.Island;
@@ -94,21 +95,10 @@ public class BIUtils {
     public static boolean pay(Island is, double value) {
         double own = getBankBalance(is);
         if (own < value) return false;
+        var name = Bukkit.getOfflinePlayer(is.getOwner()).getName();
+        var cmd = "bsbadmin bank take " + name + " " + value;
 
-        try {
-            var bank = BentoBox.getInstance().getAddonsManager().getAddonByName("Bank").get();
-
-            var getBankManager = bank.getClass().getMethod("getBankManager");
-
-            var bankManager = getBankManager.invoke(bank);
-            var getBalance = bankManager.getClass().getMethod("getBalance", Island.class);
-
-            var balance = getBalance.invoke(bankManager, is);
-            balance.getClass().getMethod("setValue", double.class).invoke(balance, own - value);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
 
         return true;
     }
