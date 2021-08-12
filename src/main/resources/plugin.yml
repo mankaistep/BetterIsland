@@ -3,7 +3,7 @@ version: ${project.version}
 main: me.manaki.plugin.betterisland.BetterIsland
 api-version: 1.16
 depend: [ BentoBox ]
-softdepend: [PlayerData]
+softdepend: [PlayerData, SantoryCore]
 commands:
   islandupgrade:
     description: MankaiStep

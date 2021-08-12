@@ -5,6 +5,7 @@ import me.manaki.plugin.betterisland.BetterIsland;
 import me.manaki.plugin.betterisland.border.Borders;
 import me.manaki.plugin.betterisland.money.MoneyAPI;
 import me.manaki.plugin.betterisland.util.BIUtils;
+import mk.plugin.santory.skin.system.PlayerSkins;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -91,6 +92,9 @@ public class IslandGUI {
         if (slot == GO_BUTTON) {
             p.closeInventory();
             Bukkit.getScheduler().runTask(BetterIsland.get(), () -> {
+                if (Bukkit.getPluginManager().isPluginEnabled("SantoryCore")) {
+                    PlayerSkins.doBeforeTeleport(p, 35);
+                }
                 Bukkit.dispatchCommand(p, "is go");
             });
         }
