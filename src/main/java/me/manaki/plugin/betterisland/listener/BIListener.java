@@ -7,6 +7,7 @@ import me.manaki.plugin.betterisland.util.BIUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import uk.antiperson.stackmob.StackMob;
 import world.bentobox.bentobox.BentoBox;
 import world.bentobox.bentobox.api.events.island.IslandEnterEvent;
 
@@ -40,7 +42,19 @@ public class BIListener implements Listener {
         // Count
         int c = 0;
         for (Entity nearE : is.getCenter().getNearbyEntities(200, 200, 200)) {
-            if (nearE instanceof Animals) c++;
+            if (nearE instanceof Animals) {
+                var le = (LivingEntity) nearE;
+                // Check stack
+                boolean isStacked = false;
+                if (Bukkit.getPluginManager().isPluginEnabled("StackMob")) {
+                    var smem = StackMob.getPlugin(StackMob.class).getEntityManager();
+                    if (smem.isStackedEntity(le)) {
+                        c += smem.getStackEntity(le).getSize();
+                        isStacked = true;
+                    }
+                }
+                if (!isStacked) c++;
+            }
             if (c >= max) {
                 for (Player p : is.getPlayersOnIsland()) {
                     p.sendActionBar("§cVừa có thú nuôi spawn, nhưng vượt quá số lượng tối đa nên bị hủy");
